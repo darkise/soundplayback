@@ -23,7 +23,8 @@
 
 #define PCM_DEVICE "default"
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) 
+{
 	unsigned int pcm, tmp, dir;
 	int rate, channels, seconds;
 	snd_pcm_t *pcm_handle;
@@ -33,8 +34,7 @@ int main(int argc, char **argv) {
 	int buff_size, loops;
 
 	if (argc < 4) {
-		printf("Usage: %s <sample_rate> <channels> <seconds>\n",
-								argv[0]);
+		printf("Usage: %s <sample_rate> <channels> <seconds>\n", argv[0]);
 		return -1;
 	}
 
@@ -43,23 +43,18 @@ int main(int argc, char **argv) {
 	seconds  = atoi(argv[3]);
 
 	/* Open the PCM device in playback mode */
-	if (pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE,
-					SND_PCM_STREAM_PLAYBACK, 0) < 0) 
-		printf("ERROR: Can't open \"%s\" PCM device. %s\n",
-					PCM_DEVICE, snd_strerror(pcm));
+	if (pcm = snd_pcm_open(&pcm_handle, PCM_DEVICE, SND_PCM_STREAM_PLAYBACK, 0) < 0) 
+		printf("ERROR: Can't open \"%s\" PCM device. %s\n", PCM_DEVICE, snd_strerror(pcm));
 
 	/* Allocate parameters object and fill it with default values*/
 	snd_pcm_hw_params_alloca(&params);
-
 	snd_pcm_hw_params_any(pcm_handle, params);
 
 	/* Set parameters */
-	if (pcm = snd_pcm_hw_params_set_access(pcm_handle, params,
-					SND_PCM_ACCESS_RW_INTERLEAVED) < 0) 
+	if (pcm = snd_pcm_hw_params_set_access(pcm_handle, params, SND_PCM_ACCESS_RW_INTERLEAVED) < 0) 
 		printf("ERROR: Can't set interleaved mode. %s\n", snd_strerror(pcm));
 
-	if (pcm = snd_pcm_hw_params_set_format(pcm_handle, params,
-						SND_PCM_FORMAT_S16_LE) < 0) 
+	if (pcm = snd_pcm_hw_params_set_format(pcm_handle, params, SND_PCM_FORMAT_S16_LE) < 0) 
 		printf("ERROR: Can't set format. %s\n", snd_strerror(pcm));
 
 	if (pcm = snd_pcm_hw_params_set_channels(pcm_handle, params, channels) < 0) 
@@ -108,7 +103,8 @@ int main(int argc, char **argv) {
 		if (pcm = snd_pcm_writei(pcm_handle, buff, frames) == -EPIPE) {
 			printf("XRUN.\n");
 			snd_pcm_prepare(pcm_handle);
-		} else if (pcm < 0) {
+		}
+		else if (pcm < 0) {
 			printf("ERROR. Can't write to PCM device. %s\n", snd_strerror(pcm));
 		}
 
